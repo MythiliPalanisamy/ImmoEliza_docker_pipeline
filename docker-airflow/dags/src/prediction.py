@@ -3,10 +3,10 @@ import tkinter as tk
 import pickle
 import numpy as np
 
-AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-ohe_pickle_path = AIRFLOW_HOME + "/dags/pickles/ohe.pickle"
-minmax_pickle_path = AIRFLOW_HOME + "/dags/pickles/minmax_scaler.pickle"
-forest_pickle_path = AIRFLOW_HOME + "/dags/pickles/forest.pickle"
+#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+ohe_pickle_path = "/dags/pickles/ohe.pickle"
+minmax_pickle_path =  "/dags/pickles/minmax_scaler.pickle"
+forest_pickle_path =  "/dags/pickles/forest.pickle"
 
 def preprocess(raw_dataframe):
     

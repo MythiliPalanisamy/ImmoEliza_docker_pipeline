@@ -8,10 +8,10 @@ from sklearn.ensemble import RandomForestRegressor
 
 def preprocess():
 
-    AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    ohe_pickle_path = AIRFLOW_HOME + "/dags/pickles/ohe.pickle"
-    minmax_pickle_path = AIRFLOW_HOME + "/dags/pickles/minmax_scaler.pickle"
-    df = pd.read_csv(AIRFLOW_HOME + '/dags/data/cleaned.csv')
+    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+    ohe_pickle_path = "/dags/pickles/ohe.pickle"
+    minmax_pickle_path = "/dags/pickles/minmax_scaler.pickle"
+    df = pd.read_csv( '/dags/data/cleaned.csv')
     column=[ 'type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type',] # catagorical
 
     # using onehot encoder
@@ -39,8 +39,8 @@ def preprocess():
 
 def RandomForestReg(train_x,train_y, test_x,test_y):
 
-    AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    forest_pickle_path = AIRFLOW_HOME + "/dags/pickles/forest.pickle"
+    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+    forest_pickle_path =  "/dags/pickles/forest.pickle"
 
     y_train = np.ravel(train_y)
     y_test = np.ravel(test_y)
@@ -64,10 +64,3 @@ def training_model():
     RandomForestReg(x_train,y_train,x_test,y_test)
     return
 
-"""def predict_forest_price(processed_data):
-
-    # loading forest module
-    forest = pickle.load(open('forest_pickle.pickle', 'rb'))
-    predicted_price = forest.predict(processed_data)
-
-    return predicted_price"""

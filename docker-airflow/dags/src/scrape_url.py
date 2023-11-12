@@ -31,9 +31,9 @@ def extend_full_list(full_list, properties_per_page):
     return full_list
 
 def houses_and_apartments(properties_per_page):
-    AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    appartment_url_path = AIRFLOW_HOME + "/dags/data/apartments1_url.txt"
-    house_url_path = AIRFLOW_HOME + "/dags/data/houses1_url.txt"
+    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+    appartment_url_path =  "/dags/data/apartments1_url.txt"
+    house_url_path =  "/dags/data/houses1_url.txt"
     with open(appartment_url_path, 'w') as apartments_file, open(house_url_path, 'w') as houses_file:
         for line in properties_per_page:
             if '/apartment/' in line:

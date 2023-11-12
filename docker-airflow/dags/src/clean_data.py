@@ -2,9 +2,9 @@ import pandas as pd
 
 def clean():
 
-    AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    cleaned_csv_path = AIRFLOW_HOME + "/dags/data/cleaned.csv"
-    df = pd.read_csv(AIRFLOW_HOME + "/dags/data/scraped_data.csv")
+    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+    cleaned_csv_path = "/dags/data/cleaned.csv"
+    df = pd.read_csv("/dags/data/scraped_data.csv")
 
     df = df.drop_duplicates()
 

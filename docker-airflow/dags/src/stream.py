@@ -5,8 +5,8 @@ import seaborn as sns
 import plotly.express as px
 
 
-AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-data = pd.read_csv(AIRFLOW_HOME + '/dags/data/cleaned.csv')
+#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+data = pd.read_csv( '/dags/data/cleaned.csv')
 
 # Streamlit app title
 st.title("Real Estate Property Explorer")

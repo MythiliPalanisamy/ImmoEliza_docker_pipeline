@@ -5,12 +5,12 @@ from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 
-AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-appartment_url_path = AIRFLOW_HOME + "/dags/data/apartments1_url.txt"
-house_url_path = AIRFLOW_HOME + "/dags/data/houses1_url.txt"
-merged_file_path = AIRFLOW_HOME + "/dags/data/merged_file.txt"
-skipped_url_path = AIRFLOW_HOME + "/dags/data/skipped_urls.txt"
-scraped_csv_path = AIRFLOW_HOME + "/dags/data/scraped_data.csv"
+#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
+appartment_url_path =  "/dags/data/apartments1_url.txt"
+house_url_path =  "/dags/data/houses1_url.txt"
+merged_file_path = "/dags/data/merged_file.txt"
+skipped_url_path = "/dags/data/skipped_urls.txt"
+scraped_csv_path =  "/dags/data/scraped_data.csv"
 
 skipped_urls = []
 def needed(needed_things):
