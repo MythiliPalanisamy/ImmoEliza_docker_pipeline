@@ -1,0 +1,48 @@
+[2023-11-12T05:32:02.700+0000] {processor.py:157} INFO - Started process (PID=6512) to work on /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:02.701+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_data.py for tasks to queue
+[2023-11-12T05:32:02.705+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:02.704+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:03.475+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:03.464+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_data.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_data.py", line 108, in <module>
+    scrape()
+  File "/opt/airflow/dags/scrape_data.py", line 75, in scrape
+    with open(appartment_url_path) as appartment:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:32:03.479+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:03.754+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_data.py took 1.059 seconds
+[2023-11-12T05:32:36.924+0000] {processor.py:157} INFO - Started process (PID=6537) to work on /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:36.925+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_data.py for tasks to queue
+[2023-11-12T05:32:36.928+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:36.928+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:37.748+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:37.736+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_data.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_data.py", line 108, in <module>
+    scrape()
+  File "/opt/airflow/dags/scrape_data.py", line 75, in scrape
+    with open(appartment_url_path) as appartment:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:32:37.751+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:32:37.941+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_data.py took 1.021 seconds
+[2023-11-12T05:33:10.408+0000] {processor.py:157} INFO - Started process (PID=6560) to work on /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:33:10.418+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_data.py for tasks to queue
+[2023-11-12T05:33:10.421+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:33:10.421+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:33:11.025+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:33:11.015+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_data.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_data.py", line 108, in <module>
+    scrape()
+  File "/opt/airflow/dags/scrape_data.py", line 75, in scrape
+    with open(appartment_url_path) as appartment:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:33:11.029+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_data.py
+[2023-11-12T05:33:11.182+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_data.py took 0.787 seconds

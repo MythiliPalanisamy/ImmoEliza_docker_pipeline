@@ -1,0 +1,60 @@
+[2023-11-12T05:31:58.453+0000] {processor.py:157} INFO - Started process (PID=6507) to work on /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:31:58.459+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_url.py for tasks to queue
+[2023-11-12T05:31:58.465+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:31:58.464+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:32:01.434+0000] {logging_mixin.py:151} INFO - https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=1
+[2023-11-12T05:32:02.693+0000] {logging_mixin.py:151} INFO - list length:  30
+[2023-11-12T05:32:02.703+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:02.694+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_url.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_url.py", line 61, in <module>
+    final_list = scraping_url()
+  File "/opt/airflow/dags/scrape_url.py", line 56, in scraping_url
+    houses_and_apartments(properties_per_page)
+  File "/opt/airflow/dags/scrape_url.py", line 37, in houses_and_apartments
+    with open(appartment_url_path, 'w') as apartments_file, open(house_url_path, 'w') as houses_file:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:32:02.709+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:32:02.933+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_url.py took 4.497 seconds
+[2023-11-12T05:32:33.119+0000] {processor.py:157} INFO - Started process (PID=6532) to work on /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:32:33.121+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_url.py for tasks to queue
+[2023-11-12T05:32:33.127+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:33.126+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:32:35.472+0000] {logging_mixin.py:151} INFO - https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=1
+[2023-11-12T05:32:36.718+0000] {logging_mixin.py:151} INFO - list length:  30
+[2023-11-12T05:32:36.727+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:32:36.720+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_url.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_url.py", line 61, in <module>
+    final_list = scraping_url()
+  File "/opt/airflow/dags/scrape_url.py", line 56, in scraping_url
+    houses_and_apartments(properties_per_page)
+  File "/opt/airflow/dags/scrape_url.py", line 37, in houses_and_apartments
+    with open(appartment_url_path, 'w') as apartments_file, open(house_url_path, 'w') as houses_file:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:32:36.732+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:32:36.862+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_url.py took 3.751 seconds
+[2023-11-12T05:33:07.030+0000] {processor.py:157} INFO - Started process (PID=6557) to work on /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:33:07.032+0000] {processor.py:829} INFO - Processing file /opt/airflow/dags/scrape_url.py for tasks to queue
+[2023-11-12T05:33:07.036+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:33:07.035+0000] {dagbag.py:539} INFO - Filling up the DagBag from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:33:08.257+0000] {logging_mixin.py:151} INFO - https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=1
+[2023-11-12T05:33:10.045+0000] {logging_mixin.py:151} INFO - list length:  30
+[2023-11-12T05:33:10.054+0000] {logging_mixin.py:151} INFO - [2023-11-12T05:33:10.046+0000] {dagbag.py:347} ERROR - Failed to import: /opt/airflow/dags/scrape_url.py
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.8/site-packages/airflow/models/dagbag.py", line 343, in parse
+    loader.exec_module(new_module)
+  File "<frozen importlib._bootstrap_external>", line 843, in exec_module
+  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
+  File "/opt/airflow/dags/scrape_url.py", line 61, in <module>
+    final_list = scraping_url()
+  File "/opt/airflow/dags/scrape_url.py", line 56, in scraping_url
+    houses_and_apartments(properties_per_page)
+  File "/opt/airflow/dags/scrape_url.py", line 37, in houses_and_apartments
+    with open(appartment_url_path, 'w') as apartments_file, open(house_url_path, 'w') as houses_file:
+FileNotFoundError: [Errno 2] No such file or directory: '/dags/data/apartments1_url.txt'
+[2023-11-12T05:33:10.060+0000] {processor.py:841} WARNING - No viable dags retrieved from /opt/airflow/dags/scrape_url.py
+[2023-11-12T05:33:10.216+0000] {processor.py:179} INFO - Processing /opt/airflow/dags/scrape_url.py took 3.191 seconds
