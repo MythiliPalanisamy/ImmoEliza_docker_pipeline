@@ -2,12 +2,12 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator 
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
-import src.scrape_url as scrape_url
-import src.scrape_data as scrape_data
-import src.clean_data as cleaning
-import src.models as models
-import src.prediction as prediction
-import src.stream as stream
+import scrape_url as scrape_url
+import scrape_data as scrape_data
+import clean_data as cleaning
+import models as models
+import prediction as prediction
+import stream as stream
 
 AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
 
@@ -22,7 +22,7 @@ default_args_for_prediction = {'owner' : 'admin',
 
 with DAG('cleaning_and_training_model1', 
             default_args=default_args,
-            description='My airflow DAG', 
+            description='Pipeline', 
             start_date=datetime(2023, 9, 21, 1), # Year, Month, Day, Hour,
             schedule_interval='@daily') as dag:
 
