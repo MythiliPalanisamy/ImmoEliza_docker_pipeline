@@ -3,10 +3,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+import aws_s3 as s3
 
+bucket_name = 'immoeliza'
+s3_key = f'{bucket_name}/data/' # path of file in s3
+scraped_data = 'scraped_data.csv'
+cleaned = 'cleaned.csv'
 
-#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-data = pd.read_csv( '/dags/data/cleaned.csv')
+read_cleaned = s3.read_file_from_s3(bucket_name, s3_key + cleaned)
+data = pd.read_csv( read_cleaned)
 
 # Streamlit app title
 st.title("Real Estate Property Explorer")

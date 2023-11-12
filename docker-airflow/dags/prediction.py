@@ -3,10 +3,11 @@ import tkinter as tk
 import pickle
 import numpy as np
 
-#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-ohe_pickle_path = "/dags/pickles/ohe.pickle"
-minmax_pickle_path =  "/dags/pickles/minmax_scaler.pickle"
-forest_pickle_path =  "/dags/pickles/forest.pickle"
+bucket_name = 'immoeliza'
+s3_key = f'{bucket_name}/pickles/' # path of file in s3
+forest_pickle_path =  "forest.pickle"
+ohe_pickle_path = "ohe.pickle"
+minmax_pickle_path = "minmax_scaler.pickle"
 
 def preprocess(raw_dataframe):
     
@@ -22,8 +23,8 @@ def preprocess(raw_dataframe):
     column=[ 'type_of_property', 'building_condition', 'kitchen_type',  'energy_class', 'heating_type',]
     
     # loading one hot encoding trained data and minmax scaler
-    ohe = pickle.load(open(ohe_pickle_path, 'rb'))
-    minmax_scaler = pickle.load(open(minmax_pickle_path, 'rb'))
+    ohe = pickle.load(open(s3_key + ohe_pickle_path, 'rb'))
+    minmax_scaler = pickle.load(open(s3_key + minmax_pickle_path, 'rb'))
 
 
 

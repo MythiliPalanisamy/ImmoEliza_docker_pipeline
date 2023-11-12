@@ -4,18 +4,31 @@ import requests
 from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
+import aws_s3 as s3
+import logging
 
-#AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-appartment_url_path =  "/dags/data/apartments1_url.txt"
-house_url_path =  "/dags/data/houses1_url.txt"
-merged_file_path = "/dags/data/merged_file.txt"
-skipped_url_path = "/dags/data/skipped_urls.txt"
-scraped_csv_path =  "/dags/data/scraped_data.csv"
+local_file_path = 'local_file.json' # path of file locally
+bucket_name = 'immoeliza'
+s3_key = f'{bucket_name}/data/' # path of file in s3
+apartments = 'apartments_url.txt'
+houses = 'houses.txt'
+merged_file = 'merged_file.txt'
+skipped_url = 'skipped_urls.txt'
+scraped_data = 'scraped_data.csv'
 
+appartment_url_path = s3.read_file_from_s3(bucket_name, s3_key + apartments)
+house_url_path =  s3.read_file_from_s3(bucket_name, s3_key + houses)
+merged_file_path = s3.read_file_from_s3(bucket_name, s3_key + merged_file)
+skipped_url_path = s3.read_file_from_s3(bucket_name, s3_key + skipped_url)
+scraped_csv_path = s3.read_file_from_s3(bucket_name, s3_key + scraped_data)
+
+logging.basicConfig(level=logging.INFO)
 skipped_urls = []
+
 def needed(needed_things):
-    list= []
-    list.append(needed_things)
+    lst= []
+    lst.append(needed_things)
+    logging.info(lst)
     print(list)
 
 def details_of_house(url):
@@ -65,13 +78,15 @@ def details_of_house(url):
         
         needed(needed_things)
         return needed_things 
-    except:
+    except Exception as e:
         print('error: skipped a line:' , url)
+        logging.error(f"Error scraping details for URL {url}: {e}")
         skipped_urls.append(url)
         return None
 
 # creating single text file with list f url
 def scrape():
+
     with open(appartment_url_path) as appartment:
         appartment_url = appartment.read()
     with open(house_url_path) as houses:
@@ -81,6 +96,7 @@ def scrape():
     print('created merged--')
     with open(merged_file_path, 'w') as merged_file:
         merged_file.write(merged_content)
+    
     with open (merged_file_path, 'r') as merged_file:
         l = [line.strip() for line in merged_file]
     print('opend merged--')

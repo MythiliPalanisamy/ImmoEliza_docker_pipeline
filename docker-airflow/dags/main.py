@@ -12,7 +12,7 @@ import stream as stream
 AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
 
 default_args = {
-    'owner' : 'mythili',
+    'owner' : 'airflow',
     'retries': 3, 
     'retry_delay': timedelta(minutes=2)
 }
@@ -20,7 +20,7 @@ default_args = {
 default_args_for_prediction = {'owner' : 'admin',
                                'retries' : 0}
 
-with DAG('cleaning_and_training_model1', 
+with DAG('cleaning_and_training_model', 
             default_args=default_args,
             description='Pipeline', 
             start_date=datetime(2023, 9, 21, 1), # Year, Month, Day, Hour,
@@ -50,7 +50,7 @@ with DAG('run_streamlit_app',
          start_date=datetime(2023, 9, 1),
          catchup=False) as dag_streamlit:
 
-    streamlit_command = f"streamlit run {AIRFLOW_HOME}/dags/src/stream.py"
+    streamlit_command = f"streamlit run /opt/airflow/dags/stream.py"
     run_streamlit_app = BashOperator(task_id='run_streamlit', bash_command=streamlit_command, dag=dag_streamlit)
     
 

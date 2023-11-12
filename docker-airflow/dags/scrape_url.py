@@ -6,6 +6,14 @@ import requests
 from random import randint
 from time import sleep
 import time
+import aws_s3 as s3
+
+local_file_path = 'local_file.json' # path of file locally
+bucket_name = 'immoeliza'
+s3_key = f'{bucket_name}/data/' # path of file in s3
+apartments = 'apartments_url.txt'
+houses = 'houses.txt'
+
 
 base_link = ["https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=", 
             "https://www.immoweb.be/en/search/house/for-sale?countries=BE&orderBy=newest&page="]
@@ -31,15 +39,10 @@ def extend_full_list(full_list, properties_per_page):
     return full_list
 
 def houses_and_apartments(properties_per_page):
-    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    appartment_url_path =  "/dags/data/apartments1_url.txt"
-    house_url_path =  "/dags/data/houses1_url.txt"
-    with open(appartment_url_path, 'w') as apartments_file, open(house_url_path, 'w') as houses_file:
-        for line in properties_per_page:
-            if '/apartment/' in line:
-                apartments_file.write(f"{line}\n")
-            elif '/house/' in line:
-                houses_file.write(f"{line}\n")
+
+    s3.upload_file([line for line in properties_per_page if '/apartment/' in line], bucket_name, s3_key + apartments)
+    s3.upload_file([line for line in properties_per_page if '/house/' in line], bucket_name, s3_key + houses)
+
     return
 
 def scraping_url():
@@ -53,7 +56,7 @@ def scraping_url():
             site_model = get_model(page_url)
             properties_per_page = urls_from_one_page(site_model)
             full_list = extend_full_list(full_list, properties_per_page)
-            houses_and_apartments(properties_per_page)
+           # houses_and_apartments(properties_per_page)
     return 
 
 

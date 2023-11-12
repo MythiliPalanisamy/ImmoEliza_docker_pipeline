@@ -1,10 +1,16 @@
 import pandas as pd
+import aws_s3 as s3
+
+local_file_path = 'local_file.json' # path of file locally
+bucket_name = 'immoeliza'
+s3_key = f'{bucket_name}/data/' # path of file in s3
+scraped_data = 'scraped_data.csv'
+cleaned = 'cleaned.csv'
 
 def clean():
-
-    #AIRFLOW_HOME = "/home/mythili/becode/Immo_airflow/airflow"
-    cleaned_csv_path = "/dags/data/cleaned.csv"
-    df = pd.read_csv("/dags/data/scraped_data.csv")
+    
+    read_scraped = s3.read_file_from_s3(bucket_name, s3_key + scraped_data)
+    df = pd.read_csv(read_scraped)
 
     df = df.drop_duplicates()
 
@@ -48,9 +54,12 @@ def clean():
     df = df.drop(df[df['bathrooms'] > 10].index)
     df = df.drop(df[df['bathrooms'] == -1].index)
     df = df.drop(columns=[ 'postal_code', 'furnished', 'construction_year','terrace', 'office' ,'primary_energy_consumption','terrace_surface','outdoor_parking_space','shower_rooms'], axis=1)
-    
-    df.to_csv(cleaned_csv_path,index=False)
+
+    cleaned_csv_content = df.to_csv(index=False)
+    # Upload cleaned content directly to S3
+    s3.upload_file(cleaned_csv_content, bucket_name, s3_key + cleaned)
     return df
+
 print('starting cleaning')
 clean()
 print('cleaned the scraped data')
