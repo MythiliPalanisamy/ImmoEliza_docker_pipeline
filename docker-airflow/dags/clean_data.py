@@ -4,13 +4,9 @@ import aws_s3 as s3
 def clean():
     
     df = s3.read_data_from_csv("scraped_data.csv")
-    print(df)
 
     df = df.drop_duplicates()
-    print('----1')
-
     df['Energy class']=df['Energy class'].replace('Not specified', 'NS')
-    print('----2')
 
     df['Primary energy consumption']=df['Primary energy consumption'].replace('Not specified', '0')
     df['Primary energy consumption'] = pd.to_numeric(df['Primary energy consumption'], errors='coerce')
@@ -21,7 +17,7 @@ def clean():
     df['Furnished']=df['Furnished'].replace('Yes',int(1))
     df['Furnished']=df['Furnished'].replace('No',int(0))
     df['Furnished']=pd.to_numeric(df['Furnished'], errors='coerce')
-    print('----3')
+
     df['Office']=df['Office'].replace('Yes',int(1))
     df['Office']=df['Office'].replace('No',int(0))
     df['Office']=pd.to_numeric(df['Office'], errors='coerce')
@@ -32,7 +28,6 @@ def clean():
     df = df.drop(df[df['Price'] == str(0)].index)
     df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
     df = df.dropna(subset=['Price'])
-    print('----4')
         
     df.rename(columns=({'Type_of_property' : 'type_of_property','Shower rooms':'shower_rooms','Office':'office','Construction year': 'construction_year','Outdoor parking space': 'outdoor_parking_space','Furnished':'furnished','Terrace':'terrace', 'Terrace surface':'terrace_surface', 'Price':'price', 'Address':'address', 'Primary energy consumption':'primary_energy_consumption', 'Location':'location','postal code': 'postal_code','immo code':'immo_code', 'Energy class' : 'energy_class', 'Bedrooms' : 'bedrooms', 'Bathrooms': 'bathrooms' , 'Toilets': 'toilets', 'Number of frontages': 'number_of_frontages','Kitchen type': 'kitchen_type','Heating type': 'heating_type', 'Surface of the plot': 'surface_of_the_plot',  'Living room surface': 'living_room_surface', 'province':'province' , 'Building condition':'building_condition'}),inplace=True)
     df = df[df['price'] < 7.1e5]
@@ -51,18 +46,16 @@ def clean():
     df = df.drop(df[df['bathrooms'] > 10].index)
     df = df.drop(df[df['bathrooms'] == -1].index)
     df = df.drop(columns=[ 'postal_code', 'furnished', 'construction_year','terrace', 'office' ,'primary_energy_consumption','terrace_surface','outdoor_parking_space','shower_rooms'], axis=1)
-    print('----5')
-    # Convert df.columns to a list
-   
-    columns_list = df.columns.tolist()
 
+    # Convert df.columns to a list
+    columns_list = df.columns.tolist()
     df = df.to_dict(orient='records')
-    print(df)
 
     # Upload cleaned content directly to S3
     s3.upload_csv_to_s3('cleaned.csv', columns_list, df)
+
     return df
 
 print('starting cleaning')
 clean()
-print('cleaned the scraped data')
+print('ens cleaning')

@@ -64,6 +64,7 @@ def details_of_house(url):
         
         needed(needed_things)
         return needed_things 
+    
     except Exception as e:
         print('error: skipped a line:' , url)
         logging.error(f"Error scraping details for URL {url}: {e}")
@@ -73,12 +74,7 @@ def details_of_house(url):
 # creating single text file with list f url
 def scrape():
 
-
-    # merged_file = s3.upload_text_to_s3(merged_content)
     l = final_list
-    print('opend merged--')
-    print(l)
-
     House_details = []
 
     with ThreadPoolExecutor(max_workers=10) as executor:
@@ -92,13 +88,12 @@ def scrape():
             print("skipped urls: ", skipped_urls)
 
     df = pd.DataFrame(House_details)
-#    df.to_csv(scraped_csv_path,mode='a', index=False)
 
     s3.upload_csv_to_s3('scraped_data.csv', df.columns, House_details)
-    print('created scraped csv---')
-    print(House_details)
-
     s3.upload_text_to_s3('skipped_url.txt', skipped_urls)
-    print(skipped_urls)
+   
     return df
+
+print('start scrape data')
 scrape()
+print('end scrape data')

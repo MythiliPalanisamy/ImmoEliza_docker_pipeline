@@ -1,5 +1,6 @@
 import boto3
 import csv
+import pickle
 from io import StringIO
 import pandas as pd
 import keys as keys
@@ -60,3 +61,11 @@ def read_data_from_text(text_file_name):
 def pickling(pickled_data, name):
     pickls = s3.put_object(Body=pickled_data, Bucket="immoeliza", Key=name)
     return pickls
+
+def read_pickled_data_from_s3(name):
+    
+    response = s3.get_object(Bucket='immoeliza', Key=name)
+    pickled_data = response['Body'].read()
+    # Load the pickled data
+    data = pickle.loads(pickled_data)
+    return data

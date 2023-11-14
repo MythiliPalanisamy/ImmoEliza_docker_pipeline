@@ -8,10 +8,6 @@ from time import sleep
 import time
 import aws_s3 as s3
 
-apartments = 'apartments_url.txt'
-houses = 'houses_url.txt'
-
-
 base_link = ["https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=", 
             "https://www.immoweb.be/en/search/house/for-sale?countries=BE&orderBy=newest&page="]
 
@@ -37,17 +33,18 @@ def extend_full_list(full_list, properties_per_page):
 
 def houses_and_apartments(properties_per_page):
     apartment_house_list = []
+
     for line in properties_per_page:
         if '/apartment/' in line:
             apartment_house_list.append(line)
-            #s3.upload_text_to_s3(apartments, line)
         elif '/house/' in line:
             apartment_house_list.append(line)
-           # s3.upload_text_to_s3(houses, line)
+
     return apartment_house_list
 
 
 def scraping_url():
+
     """Scrapes property urls from search results page after page"""
     full_list = []
     for base_url in base_link:
@@ -62,9 +59,11 @@ def scraping_url():
 
     return apartment_house_list
 
-
+print('start scrape url')
 start = time.time()
 final_list = scraping_url()
 end = time.time()
 print("Time Taken: {:.6f}s".format(end-start))
+print('end scrape url')
+
 

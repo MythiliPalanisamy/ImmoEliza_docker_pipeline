@@ -1,160 +1,80 @@
-"""import pandas as pd
-import tkinter as tk
+import streamlit as st
 import pickle
+import pandas as pd
 import numpy as np
+import aws_s3 as s3
 
-bucket_name = 'immoeliza'
-s3_key = f'{bucket_name}/pickles/' # path of file in s3
-forest_pickle_path =  "forest.pickle"
-ohe_pickle_path = "ohe.pickle"
-minmax_pickle_path = "minmax_scaler.pickle"
-
-def preprocess(raw_dataframe):
-    
     # For reference :
     #'one_hot_encoded_array' = encoding given column's with one hot encoder.
     #'ohe.categories_' = list of category in each column as separate array.
     #'categories' = coverting list of (names of) arrays as single array
     #'encoded_dataframe' = converting encoded array and names of array as single dataframe
     #'final' = concatenating encoded dataframe and original dataframe
-    
 
-    # catagorical columns
-    column=[ 'type_of_property', 'building_condition', 'kitchen_type',  'energy_class', 'heating_type',]
-    
-    # loading one hot encoding trained data and minmax scaler
-    ohe = pickle.load(open(s3_key + ohe_pickle_path, 'rb'))
-    minmax_scaler = pickle.load(open(s3_key + minmax_pickle_path, 'rb'))
+# Load the pickled models
 
+ohe = s3.read_pickled_data_from_s3('ohe_pickle.pkl')
+minmax_scaler = s3.read_pickled_data_from_s3('minmax_pickle.pkl')
+forest = s3.read_pickled_data_from_s3('forest_pickle.pkl')
 
-
-# using onehot encoder
+# Function to preprocess input data
+def preprocess(raw_dataframe):
+    column = ['type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type']
     one_hot_encoded_array = ohe.transform(raw_dataframe[column]).toarray()
     categories = np.concatenate(ohe.categories_)
     encoded_dataframe = pd.DataFrame(one_hot_encoded_array, columns=categories)
-
-    # droping encoded columns from original dataframe
-    raw_dataframe = raw_dataframe.drop(columns=[ 'type_of_property', 'building_condition', 'kitchen_type','energy_class', 'heating_type','postal_code'])
-    raw_dataframe = raw_dataframe.astype(int) 
-    final = pd.concat([raw_dataframe,encoded_dataframe], axis=1)
-
-# using minmax scaler
-    final[['surface_of_the_plot', 'living_room_surface']] = minmax_scaler.transform(final[[ 'surface_of_the_plot', 'living_room_surface']])
-    processed=final
-
+    raw_dataframe = raw_dataframe.drop(columns=['type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type', 'postal_code'])
+    raw_dataframe = raw_dataframe.astype(int)
+    final = pd.concat([raw_dataframe, encoded_dataframe], axis=1)
+    final[['surface_of_the_plot', 'living_room_surface']] = minmax_scaler.transform(final[['surface_of_the_plot', 'living_room_surface']])
+    processed = final
     return processed
 
-def predict(property):
-
-    #property = json.loads(property.json())
-    df = pd.DataFrame(property, index=[0])
-    
-    processed = preprocess(df)
-    price = predict_forest_price(processed)
-
-    return {'predicted_price' : price[0]}
-
+# Function to make predictions
 def predict_forest_price(processed):
-
-    # loading forest module
-    forest = pickle.load(open(forest_pickle_path, 'rb'))
     predicted_price = forest.predict(processed)
+    return predicted_price[0]
 
+# Streamlit app
+def predict_house_or_apartment():
+    st.title("Property Price Prediction")
+
+    # Collect input values using Streamlit widgets
+    type_of_property = st.text_input("Type of Property:")
+    bedrooms = st.text_input("Bedrooms:")
+    energy_class = st.text_input("Energy Class:")
+    surface_of_the_plot = st.text_input("Surface of the Plot:")
+    living_room_surface = st.text_input("Living Room Surface:")
+    building_condition = st.text_input("Building Condition:")
+    bathrooms = st.text_input("Bathrooms:")
+    kitchen_type = st.text_input("Kitchen Type:")
+    heating_type = st.text_input("Heating Type:")
+    postal_code = st.text_input("Postal Code:")
+
+    # Button to submit the form and make predictions
+    if st.button("Predict"):
+        # Create a dictionary with input values
+        property_details = {
+            "type_of_property": type_of_property,
+            "bedrooms": bedrooms,
+            "energy_class": energy_class,
+            "surface_of_the_plot": surface_of_the_plot,
+            "living_room_surface": living_room_surface,
+            "number_of_frontages": 0,
+            "building_condition": building_condition,
+            "bathrooms": bathrooms,
+            "toilets": 0,
+            "kitchen_type": kitchen_type,
+            "heating_type": heating_type,
+            "postal_code": postal_code,
+        }
+
+        # Convert the dictionary to a DataFrame and preprocess
+        df = pd.DataFrame(property_details, index=[0])
+        processed = preprocess(df)
+
+        # Make predictions and display the result
+        predicted_price = predict_forest_price(processed)
+        st.success(f'Predicted Price: {predicted_price}')
     return predicted_price
-
-def form(type_of_property_entry, bedrooms_entry, energy_class_entry, surface_of_the_plot_entry,
-         living_room_surface_entry, building_condition_entry, bathrooms_entry, kitchen_type_entry,
-         heating_type_entry, postal_code_entry, result_label):
-    # Collect input values from the Tkinter widgets
-    property_details = {
-        "type_of_property": type_of_property_entry.get(),
-        "bedrooms": bedrooms_entry.get(),
-        "energy_class": energy_class_entry.get(),
-        "surface_of_the_plot": surface_of_the_plot_entry.get(),
-        "living_room_surface": living_room_surface_entry.get(),
-        "number_of_frontages": 0,
-        "building_condition": building_condition_entry.get(),
-        "bathrooms": bathrooms_entry.get(),
-        "toilets": 0,
-        "kitchen_type": kitchen_type_entry.get(),
-        "heating_type": heating_type_entry.get(),
-        "postal_code": postal_code_entry.get(),
-    }
-
-    # Call the predict function and update the result_label
-    prediction_result = predict(property_details)
-    result_label.config(text=f'Predicted Price: {prediction_result["predicted_price"]}')
-
-def open_prediction_dialog():
-    # Create the main Tkinter window
-    root = tk.Tk()
-    root.title("Property Price Prediction")
-
-    # Create input fields for some of the properties
-    type_of_property_label = tk.Label(root, text="Type of Property:")
-    type_of_property_label.pack()
-    type_of_property_entry = tk.Entry(root)
-    type_of_property_entry.pack()
-
-    postal_code_label = tk.Label(root, text="Postal Code:")
-    postal_code_label.pack()
-    postal_code_entry = tk.Entry(root)
-    postal_code_entry.pack()
-
-    energy_class_label = tk.Label(root, text="Energy Class:")
-    energy_class_label.pack()
-    energy_class_entry = tk.Entry(root)
-    energy_class_entry.pack()
-
-    bedrooms_label = tk.Label(root, text="Bedrooms:")
-    bedrooms_label.pack()
-    bedrooms_entry = tk.Entry(root)
-    bedrooms_entry.pack()
-
-    bathrooms_label = tk.Label(root, text="Bathroom:")
-    bathrooms_label.pack()
-    bathrooms_entry = tk.Entry(root)
-    bathrooms_entry.pack()
-
-    building_condition_label = tk.Label(root, text="Building Condition:")
-    building_condition_label.pack()
-    building_condition_entry = tk.Entry(root)
-    building_condition_entry.pack()
-
-    kitchen_type_label = tk.Label(root, text="Kitchen Type:")
-    kitchen_type_label.pack()
-    kitchen_type_entry = tk.Entry(root)
-    kitchen_type_entry.pack()
-
-    heating_type_label = tk.Label(root, text="Heating Type:")
-    heating_type_label.pack()
-    heating_type_entry = tk.Entry(root)
-    heating_type_entry.pack()
-
-    surface_of_the_plot_label = tk.Label(root, text="Surface of the Plot:")
-    surface_of_the_plot_label.pack()
-    surface_of_the_plot_entry = tk.Entry(root)
-    surface_of_the_plot_entry.pack()
-
-    living_room_surface_label = tk.Label(root, text="Living Room Surface:")
-    living_room_surface_label.pack()
-    living_room_surface_entry = tk.Entry(root)
-    living_room_surface_entry.pack()
-
-    # Create a button to submit the form
-    submit_button = tk.Button(root, text="Submit", command=lambda: form(
-        type_of_property_entry, bedrooms_entry, energy_class_entry, surface_of_the_plot_entry,
-        living_room_surface_entry, building_condition_entry, bathrooms_entry, kitchen_type_entry,
-        heating_type_entry, postal_code_entry, result_label))
-    submit_button.pack()
-    # Create a label to display the predicted price
-    result_label = tk.Label(root, text="Prediction:     ")
-    result_label.pack()
-
-    # Start the Tkinter event loop
-    root.mainloop()
-
-# Determine if the script is triggered by the "prediction" tag
-if __name__ == "__main__":
-    open_prediction_dialog()
-"""
+predict_house_or_apartment()

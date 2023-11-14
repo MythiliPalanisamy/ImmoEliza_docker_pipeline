@@ -11,7 +11,6 @@ def preprocess():
 
     df = s3.read_data_from_csv('cleaned.csv')
     
-
     column=[ 'type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type',] # catagorical
 
     # using onehot encoder
@@ -60,7 +59,11 @@ def RandomForestReg(train_x,train_y, test_x,test_y):
     return test_score
 
 def training_model():
+    
+    print('start train model')
     x_train,y_train,x_test,y_test = preprocess()
     RandomForestReg(x_train,y_train,x_test,y_test)
+    print('end train model')
+
     return
 
