@@ -1,20 +1,16 @@
 import pandas as pd
 import aws_s3 as s3
 
-local_file_path = 'local_file.json' # path of file locally
-bucket_name = 'immoeliza'
-s3_key = f'{bucket_name}/data/' # path of file in s3
-scraped_data = 'scraped_data.csv'
-cleaned = 'cleaned.csv'
-
 def clean():
     
-    read_scraped = s3.read_file_from_s3(bucket_name, s3_key + scraped_data, file_format='csv')
-    df = pd.read_csv(read_scraped)
+    df = s3.read_data_from_csv("scraped_data.csv")
+    print(df)
 
     df = df.drop_duplicates()
+    print('----1')
 
     df['Energy class']=df['Energy class'].replace('Not specified', 'NS')
+    print('----2')
 
     df['Primary energy consumption']=df['Primary energy consumption'].replace('Not specified', '0')
     df['Primary energy consumption'] = pd.to_numeric(df['Primary energy consumption'], errors='coerce')
@@ -25,7 +21,7 @@ def clean():
     df['Furnished']=df['Furnished'].replace('Yes',int(1))
     df['Furnished']=df['Furnished'].replace('No',int(0))
     df['Furnished']=pd.to_numeric(df['Furnished'], errors='coerce')
-
+    print('----3')
     df['Office']=df['Office'].replace('Yes',int(1))
     df['Office']=df['Office'].replace('No',int(0))
     df['Office']=pd.to_numeric(df['Office'], errors='coerce')
@@ -36,6 +32,7 @@ def clean():
     df = df.drop(df[df['Price'] == str(0)].index)
     df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
     df = df.dropna(subset=['Price'])
+    print('----4')
         
     df.rename(columns=({'Type_of_property' : 'type_of_property','Shower rooms':'shower_rooms','Office':'office','Construction year': 'construction_year','Outdoor parking space': 'outdoor_parking_space','Furnished':'furnished','Terrace':'terrace', 'Terrace surface':'terrace_surface', 'Price':'price', 'Address':'address', 'Primary energy consumption':'primary_energy_consumption', 'Location':'location','postal code': 'postal_code','immo code':'immo_code', 'Energy class' : 'energy_class', 'Bedrooms' : 'bedrooms', 'Bathrooms': 'bathrooms' , 'Toilets': 'toilets', 'Number of frontages': 'number_of_frontages','Kitchen type': 'kitchen_type','Heating type': 'heating_type', 'Surface of the plot': 'surface_of_the_plot',  'Living room surface': 'living_room_surface', 'province':'province' , 'Building condition':'building_condition'}),inplace=True)
     df = df[df['price'] < 7.1e5]
@@ -54,10 +51,16 @@ def clean():
     df = df.drop(df[df['bathrooms'] > 10].index)
     df = df.drop(df[df['bathrooms'] == -1].index)
     df = df.drop(columns=[ 'postal_code', 'furnished', 'construction_year','terrace', 'office' ,'primary_energy_consumption','terrace_surface','outdoor_parking_space','shower_rooms'], axis=1)
+    print('----5')
+    # Convert df.columns to a list
+   
+    columns_list = df.columns.tolist()
 
-    cleaned_csv_content = df.to_csv(index=False)
+    df = df.to_dict(orient='records')
+    print(df)
+
     # Upload cleaned content directly to S3
-    s3.upload_file(cleaned_csv_content, bucket_name, s3_key + cleaned)
+    s3.upload_csv_to_s3('cleaned.csv', columns_list, df)
     return df
 
 print('starting cleaning')

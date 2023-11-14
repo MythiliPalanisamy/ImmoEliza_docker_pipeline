@@ -7,24 +7,18 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.ensemble import RandomForestRegressor
 import aws_s3 as s3
 
-bucket_name = 'immoeliza'
-s3_key = f'{bucket_name}/pickles/' # path of file in s3
-cleaned = 'cleaned.csv'
-
 def preprocess():
 
-    ohe_pickle_path = "ohe.pickle"
-    minmax_pickle_path = "minmax_scaler.pickle"
-
-    read_cleaned = s3.read_file_from_s3(bucket_name, s3_key + cleaned, file_format='csv')
-    df = pd.read_csv( read_cleaned)
+    df = s3.read_data_from_csv('cleaned.csv')
+    
 
     column=[ 'type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type',] # catagorical
 
     # using onehot encoder
     ohe = OneHotEncoder(handle_unknown='ignore', sparse_output=True)
     one_hot_encoded_array = ohe.fit_transform(df[column]).toarray()
-    pickle.dump(ohe, open(s3_key + ohe_pickle_path, 'wb'))
+    ohe_pickle = pickle.dump(ohe)
+    s3.pickling(ohe_pickle,'ohe_pickle.pkl')
 
     categories = np.concatenate(ohe.categories_)
     encoded_dataframe = pd.DataFrame(one_hot_encoded_array, columns=categories)
@@ -39,14 +33,13 @@ def preprocess():
     # normalisation or scaling - train and test
     minmax_scaler = MinMaxScaler()
     x_train[['surface_of_the_plot', 'living_room_surface']] = minmax_scaler.fit_transform(x_train[[ 'surface_of_the_plot', 'living_room_surface']])
-    pickle.dump(minmax_scaler, open(s3_key + minmax_pickle_path, 'wb'))
+    minmax_pickle = pickle.dump(minmax_scaler)
+    s3.pickling(minmax_pickle, 'minmax_pickle.pkl')
 
     x_test[[ 'surface_of_the_plot', 'living_room_surface']]= minmax_scaler.transform(x_test[[ 'surface_of_the_plot', 'living_room_surface']])
     return x_train,y_train,x_test,y_test
 
 def RandomForestReg(train_x,train_y, test_x,test_y):
-
-    forest_pickle_path =  "forest.pickle"
 
     y_train = np.ravel(train_y)
     y_test = np.ravel(test_y)
@@ -62,7 +55,8 @@ def RandomForestReg(train_x,train_y, test_x,test_y):
     print("Test Score:", test_score)
 
     # saving the model
-    pickle.dump(forest, open(s3_key + forest_pickle_path, "wb"))
+    forest_pickle = pickle.dump(forest)
+    s3.pickling(forest_pickle, 'forest_pickle.pkl')
     return test_score
 
 def training_model():

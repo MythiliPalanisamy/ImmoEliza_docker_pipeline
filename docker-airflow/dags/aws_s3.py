@@ -56,3 +56,7 @@ def read_data_from_text(text_file_name):
     text_object = s3.get_object(Bucket="immoeliza", Key=text_file_name)
     text_data = text_object['Body'].read().decode('utf-8')
     return text_data
+
+def pickling(pickled_data, name):
+    pickls = s3.put_object(Body=pickled_data, Bucket="immoeliza", Key=name)
+    return pickls

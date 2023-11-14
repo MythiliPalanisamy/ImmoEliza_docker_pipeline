@@ -75,8 +75,9 @@ def scrape():
 
 
     # merged_file = s3.upload_text_to_s3(merged_content)
-    l = [line.strip() for line in final_list]
+    l = final_list
     print('opend merged--')
+    print(l)
 
     House_details = []
 
@@ -101,7 +102,3 @@ def scrape():
     print(skipped_urls)
     return df
 scrape()
-
-''' with open(skipped_url_path, 'a') as output_file:
-        for line in skipped_urls:
-            output_file.write(f"{line}\n")'''
