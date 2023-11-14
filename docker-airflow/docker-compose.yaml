@@ -108,7 +108,7 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
-      timeout: 30s
+      timeout: 60s
       retries: 50
       start_period: 30s
     restart: always
@@ -121,7 +121,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
       interval: 30s
-      timeout: 30s
+      timeout: 60s
       retries: 5
       start_period: 30s
     restart: always
@@ -136,7 +136,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
       interval: 30s
-      timeout: 30s
+      timeout: 60s
       retries: 5
       start_period: 30s
     restart: always
@@ -144,6 +144,14 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+  streamlit:
+    image: streamlit/streamlit  # Official Streamlit image
+    command: streamlit run --server.address 0.0.0.0 /opt/airflow/dags/stream.py
+    ports:
+      - "8501:8501"
+    depends_on:
+      - airflow-webserver
 
   airflow-worker:
     <<: *airflow-common
@@ -154,7 +162,7 @@ services:
         - "CMD-SHELL"
         - 'celery --app airflow.providers.celery.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}" || celery --app airflow.executors.celery_executor.app inspect ping -d "celery@$${HOSTNAME}"'
       interval: 30s
-      timeout: 10s
+      timeout: 60s
       retries: 5
       start_period: 30s
     environment:
@@ -174,7 +182,7 @@ services:
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type TriggererJob --hostname "$${HOSTNAME}"']
       interval: 30s
-      timeout: 10s
+      timeout: 60s
       retries: 5
       start_period: 30s
     restart: always
@@ -287,7 +295,7 @@ services:
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://localhost:5555/"]
       interval: 30s
-      timeout: 10s
+      timeout: 60s
       retries: 5
       start_period: 30s
     restart: always
