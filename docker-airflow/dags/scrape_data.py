@@ -7,21 +7,6 @@ import pandas as pd
 import aws_s3 as s3
 import logging
 
-local_file_path = 'local_file.json' # path of file locally
-bucket_name = 'immoeliza'
-s3_key = f'{bucket_name}/data/' # path of file in s3
-apartments = 'apartments_url.txt'
-houses = 'houses.txt'
-merged_file = 'merged_file.txt'
-skipped_url = 'skipped_urls.txt'
-scraped_data = 'scraped_data.csv'
-
-appartment_url_path = s3.read_file_from_s3(bucket_name, s3_key + apartments)
-house_url_path =  s3.read_file_from_s3(bucket_name, s3_key + houses)
-merged_file_path = s3.read_file_from_s3(bucket_name, s3_key + merged_file)
-skipped_url_path = s3.read_file_from_s3(bucket_name, s3_key + skipped_url)
-scraped_csv_path = s3.read_file_from_s3(bucket_name, s3_key + scraped_data)
-
 logging.basicConfig(level=logging.INFO)
 skipped_urls = []
 
@@ -87,20 +72,13 @@ def details_of_house(url):
 # creating single text file with list f url
 def scrape():
 
-    with open(appartment_url_path) as appartment:
-        appartment_url = appartment.read()
-    with open(house_url_path) as houses:
-        house_url = houses.read()
-
-    merged_content = appartment_url + house_url
+    merged_content = s3.read_data_from_text("apartments_url.txt") + '\n' + s3.read_data_from_text('houses_url.txt')
     print('created merged--')
-    with open(merged_file_path, 'w') as merged_file:
-        merged_file.write(merged_content)
-    
-    with open (merged_file_path, 'r') as merged_file:
-        l = [line.strip() for line in merged_file]
-    print('opend merged--')
+    # merged_file = s3.upload_text_to_s3(merged_content)
   
+    l = [line.strip() for line in merged_content]
+    print('opend merged--')
+
     House_details = []
 
     with ThreadPoolExecutor(max_workers=10) as executor:
@@ -114,11 +92,16 @@ def scrape():
             print("skipped urls: ", skipped_urls)
 
     df = pd.DataFrame(House_details)
-    df.to_csv(scraped_csv_path,mode='a', index=False)
+#    df.to_csv(scraped_csv_path,mode='a', index=False)
+
+    s3.upload_csv_to_s3('scraped_data.csv', df.columns, House_details)
     print('created scraped csv---')
 
-    with open(skipped_url_path, 'a') as output_file:
-        for line in skipped_urls:
-            output_file.write(f"{line}\n")
+    s3.upload_text_to_s3('skipped_url.txt', skipped_urls)
+
     return df
 scrape()
+
+''' with open(skipped_url_path, 'a') as output_file:
+        for line in skipped_urls:
+            output_file.write(f"{line}\n")'''

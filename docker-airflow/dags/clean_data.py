@@ -9,7 +9,7 @@ cleaned = 'cleaned.csv'
 
 def clean():
     
-    read_scraped = s3.read_file_from_s3(bucket_name, s3_key + scraped_data)
+    read_scraped = s3.read_file_from_s3(bucket_name, s3_key + scraped_data, file_format='csv')
     df = pd.read_csv(read_scraped)
 
     df = df.drop_duplicates()

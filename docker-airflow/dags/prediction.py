@@ -1,4 +1,4 @@
-import pandas as pd
+"""import pandas as pd
 import tkinter as tk
 import pickle
 import numpy as np
@@ -11,13 +11,13 @@ minmax_pickle_path = "minmax_scaler.pickle"
 
 def preprocess(raw_dataframe):
     
-    """ For reference :
-    'one_hot_encoded_array' = encoding given column's with one hot encoder.
-    'ohe.categories_' = list of category in each column as separate array.
-    'categories' = coverting list of (names of) arrays as single array
-    'encoded_dataframe' = converting encoded array and names of array as single dataframe
-    'final' = concatenating encoded dataframe and original dataframe
-    """
+    # For reference :
+    #'one_hot_encoded_array' = encoding given column's with one hot encoder.
+    #'ohe.categories_' = list of category in each column as separate array.
+    #'categories' = coverting list of (names of) arrays as single array
+    #'encoded_dataframe' = converting encoded array and names of array as single dataframe
+    #'final' = concatenating encoded dataframe and original dataframe
+    
 
     # catagorical columns
     column=[ 'type_of_property', 'building_condition', 'kitchen_type',  'energy_class', 'heating_type',]
@@ -157,3 +157,4 @@ def open_prediction_dialog():
 # Determine if the script is triggered by the "prediction" tag
 if __name__ == "__main__":
     open_prediction_dialog()
+"""

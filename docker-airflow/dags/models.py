@@ -16,7 +16,7 @@ def preprocess():
     ohe_pickle_path = "ohe.pickle"
     minmax_pickle_path = "minmax_scaler.pickle"
 
-    read_cleaned = s3.read_file_from_s3(bucket_name, s3_key + cleaned)
+    read_cleaned = s3.read_file_from_s3(bucket_name, s3_key + cleaned, file_format='csv')
     df = pd.read_csv( read_cleaned)
 
     column=[ 'type_of_property', 'building_condition', 'kitchen_type', 'energy_class', 'heating_type',] # catagorical
