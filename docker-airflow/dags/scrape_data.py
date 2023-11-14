@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import aws_s3 as s3
 import logging
+from scrape_url import final_list
 
 logging.basicConfig(level=logging.INFO)
 skipped_urls = []
@@ -72,11 +73,9 @@ def details_of_house(url):
 # creating single text file with list f url
 def scrape():
 
-    merged_content = s3.read_data_from_text("apartments_url.txt") + '\n' + s3.read_data_from_text('houses_url.txt')
-    print('created merged--')
+
     # merged_file = s3.upload_text_to_s3(merged_content)
-  
-    l = [line.strip() for line in merged_content]
+    l = [line.strip() for line in final_list]
     print('opend merged--')
 
     House_details = []
@@ -96,9 +95,10 @@ def scrape():
 
     s3.upload_csv_to_s3('scraped_data.csv', df.columns, House_details)
     print('created scraped csv---')
+    print(House_details)
 
     s3.upload_text_to_s3('skipped_url.txt', skipped_urls)
-
+    print(skipped_urls)
     return df
 scrape()
 

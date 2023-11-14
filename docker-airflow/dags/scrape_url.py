@@ -36,13 +36,16 @@ def extend_full_list(full_list, properties_per_page):
     return full_list
 
 def houses_and_apartments(properties_per_page):
+    apartment_house_list = []
     for line in properties_per_page:
         if '/apartment/' in line:
-            s3.upload_text_to_s3(apartments, line)
+            apartment_house_list.append(line)
+            #s3.upload_text_to_s3(apartments, line)
         elif '/house/' in line:
-            s3.upload_text_to_s3(houses, line)
+            apartment_house_list.append(line)
+           # s3.upload_text_to_s3(houses, line)
+    return apartment_house_list
 
-    return
 
 def scraping_url():
     """Scrapes property urls from search results page after page"""
@@ -55,8 +58,9 @@ def scraping_url():
             site_model = get_model(page_url)
             properties_per_page = urls_from_one_page(site_model)
             full_list = extend_full_list(full_list, properties_per_page)
-            houses_and_apartments(properties_per_page)
-    return 
+            apartment_house_list = houses_and_apartments(properties_per_page)
+
+    return apartment_house_list
 
 
 start = time.time()
