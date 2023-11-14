@@ -6,7 +6,6 @@ import scrape_url as scrape_url
 import scrape_data as scrape_data
 import clean_data as cleaning
 import models as models
-import prediction as prediction
 import stream as stream
 
 default_args = {
@@ -22,7 +21,7 @@ with DAG('cleaning_and_training_model',
             default_args=default_args,
             description='Pipeline', 
             start_date=datetime(2023, 9, 21, 1), # Year, Month, Day, Hour,
-            schedule_interval='@daily') as dag:
+            schedule_interval=None) as dag:
 
     scraping_url = PythonOperator(task_id='Scraping_url', python_callable=scrape_url.scraping_url)
     scraping_data = PythonOperator(task_id="scrape_data", python_callable=scrape_data.scrape)
@@ -30,17 +29,6 @@ with DAG('cleaning_and_training_model',
     training_model = PythonOperator(task_id='models', python_callable=models.training_model)
     
     scraping_url >> scraping_data >> clean_data >> training_model 
-
-# price pridiction
-with DAG('prediction', 
-        default_args=default_args_for_prediction,
-        description='DAG for Property Price Prediction',
-        schedule_interval=None,  
-        start_date=datetime(2023, 9, 23, 1),  
-        catchup=False  
-        ) as dag_prediction:
-    streamlit_command = f"streamlit run /opt/airflow/dags/prediction.py"
-    predict_task = BashOperator(task_id='run_prediction', bash_command = streamlit_command, dag=dag_prediction)
 
 # streamlit
 with DAG('run_streamlit_app',
