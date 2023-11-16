@@ -9,4 +9,5 @@ WORKDIR /opt
 
 ADD requirements.txt .
 
+
 RUN pip install apache-airflow -r requirements.txt

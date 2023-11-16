@@ -77,6 +77,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -94,6 +95,7 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 10s
@@ -146,12 +148,19 @@ services:
         condition: service_completed_successfully
 
   streamlit:
-    image: streamlit/streamlit  # Official Streamlit image
-    command: streamlit run --server.address 0.0.0.0 /opt/airflow/dags/stream.py
+      # Use the version that you need
+    command: bash -c "streamlit run /opt/airflow/dags/stream.py"
     ports:
       - "8501:8501"
-    depends_on:
-      - airflow-webserver
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 30s
+    restart: always
+    volumes:
+      - ${AIRFLOW_PROJ_DIR:-.}/dags/stream.py:/opt/airflow/dags/stream.py
 
   airflow-worker:
     <<: *airflow-common
