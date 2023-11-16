@@ -9,5 +9,9 @@ WORKDIR /opt
 
 ADD requirements.txt .
 
+EXPOSE 8501
+
+ENTRYPOINT ["streamlit", "run", "stream.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
 RUN pip install apache-airflow -r requirements.txt
+

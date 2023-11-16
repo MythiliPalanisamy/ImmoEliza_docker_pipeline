@@ -148,6 +148,7 @@ services:
         condition: service_completed_successfully
 
   streamlit:
+    <<: *airflow-common
       # Use the version that you need
     command: bash -c "streamlit run /opt/airflow/dags/stream.py"
     ports:
