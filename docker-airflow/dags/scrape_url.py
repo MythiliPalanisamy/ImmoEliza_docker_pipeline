@@ -1,12 +1,14 @@
 """This file contains all functions related to the gathering of urls for sitescraping"""
 
-from bs4 import BeautifulSoup
-from lxml import etree
-import requests
-from random import randint
-from time import sleep
 import time
+import logging
+import requests
 import aws_s3 as s3
+from lxml import etree
+from time import sleep
+from random import randint
+from bs4 import BeautifulSoup
+
 
 base_link = ["https://www.immoweb.be/en/search/apartment/for-sale?countries=BE&orderBy=newest&page=", 
             "https://www.immoweb.be/en/search/house/for-sale?countries=BE&orderBy=newest&page="]
@@ -59,11 +61,12 @@ def scraping_url():
 
     return apartment_house_list
 
-print('start scrape url')
-start = time.time()
-final_list = scraping_url()
-end = time.time()
-print("Time Taken: {:.6f}s".format(end-start))
-print('end scrape url')
+def scraping_url_run():
+    logging.info('start scrape url')
+    start = time.time()
+    final_list = scraping_url()
+    end = time.time()
+    logging.info("Time Taken: {:.6f}s".format(end-start))
+    logging.info('end scrape url')
 
 

@@ -1,8 +1,10 @@
 import pandas as pd
 import aws_s3 as s3
+import logging
 
 def clean():
-    
+    logging.info('starting cleaning')
+
     df = s3.read_data_from_csv("scraped_data.csv")
 
     df = df.drop_duplicates()
@@ -53,9 +55,7 @@ def clean():
 
     # Upload cleaned content directly to S3
     s3.upload_csv_to_s3('cleaned.csv', columns_list, df)
+    logging.info('end cleaning')
 
     return df
 
-print('starting cleaning')
-clean()
-print('ens cleaning')

@@ -1,6 +1,7 @@
 import pickle
 import pandas as pd
 import numpy as np
+import logging
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.preprocessing import OneHotEncoder
@@ -60,10 +61,10 @@ def RandomForestReg(train_x,train_y, test_x,test_y):
 
 def training_model():
     
-    print('start train model')
+    logging.info('start train model')
     x_train,y_train,x_test,y_test = preprocess()
     RandomForestReg(x_train,y_train,x_test,y_test)
-    print('end train model')
+    logging.info('end train model')
 
     return
 

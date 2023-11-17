@@ -15,7 +15,6 @@ def needed(needed_things):
     lst= []
     lst.append(needed_things)
     logging.info(lst)
-    print(list)
 
 def details_of_house(url):
     list_of_header = []
@@ -74,6 +73,8 @@ def details_of_house(url):
 # creating single text file with list f url
 def scrape():
 
+    logging.info('start scrape data')
+
     l = final_list
     House_details = []
 
@@ -91,9 +92,7 @@ def scrape():
 
     s3.upload_csv_to_s3('scraped_data.csv', df.columns, House_details)
     s3.upload_text_to_s3('skipped_url.txt', skipped_urls)
+    logging.info('end scrape data')
    
     return df
 
-print('start scrape data')
-scrape()
-print('end scrape data')
