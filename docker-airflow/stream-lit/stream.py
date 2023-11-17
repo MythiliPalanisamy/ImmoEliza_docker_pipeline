@@ -5,9 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
-from dags import aws_s3 as s3
-
-
+import aws_s3 as s3
 
 data = s3.read_data_from_csv('cleaned.csv')
 
