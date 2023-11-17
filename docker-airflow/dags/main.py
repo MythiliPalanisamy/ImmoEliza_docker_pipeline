@@ -12,19 +12,19 @@ default_args = {
     'retry_delay': timedelta(minutes=2)
 }
 
-dag = DAG('cleaning_and_training_model', 
-          default_args=default_args,
-          description='Pipeline', 
-          start_date=datetime(2023, 11, 10, 1), # Year, Month, Day, Hour,
-          schedule_interval=None)
+with DAG('cleaning_and_training_model5', 
+            default_args=default_args,
+            description='Pipeline', 
+            start_date=datetime(2023, 11, 15, 1), # Year, Month, Day, Hour,
+            schedule_interval=None) as dag:
 
-def main_execution():
-    scraping_url_task = PythonOperator(task_id='Scraping_url', python_callable=scrape_url.scraping_url_run)
-    scraping_data_task = PythonOperator(task_id="scrape_data", python_callable=scrape_data.scrape)
-    clean_data_task = PythonOperator(task_id='clean_data', python_callable=cleaning.clean)
-    training_model_task = PythonOperator(task_id='models', python_callable=models.training_model)
-    
-    scraping_url_task >> scraping_data_task >> clean_data_task >> training_model_task
+        scraping_url_task = PythonOperator(task_id='Scraping_url', python_callable=scrape_url.scraping_url)
+        scraping_data_task = PythonOperator(task_id="scrape_data", python_callable=scrape_data.scrape)
+        clean_data_task = PythonOperator(task_id='clean_data', python_callable=cleaning.clean)
+        training_model_task = PythonOperator(task_id='models', python_callable=models.training_model)
+        
+        scraping_url_task >> scraping_data_task >> clean_data_task >> training_model_task
 
-if __name__ == "__main__":
-    main_execution()
+        
+
+        

@@ -68,5 +68,6 @@ def scraping_url_run():
     end = time.time()
     logging.info("Time Taken: {:.6f}s".format(end-start))
     logging.info('end scrape url')
+    s3.upload_text_to_s3('scraped_url.txt', final_list)
 
 
