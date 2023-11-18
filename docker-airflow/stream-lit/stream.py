@@ -26,7 +26,7 @@ if selected_agenda_item == "Introduction":
     st.write("In this page you can see some visualisation and entire dataset which you can filter to see the availability of desired house or apartment. ")
 
 elif selected_agenda_item == "Visualisation":
-    plt.use('Agg')
+
     # Create a countplot
     countplot_fig, countplot_ax = plt.subplots(figsize=(8, 6))
     sns.countplot(data=data, x="type_of_property", ax=countplot_ax)
@@ -61,26 +61,24 @@ elif selected_agenda_item == "Visualisation":
 
 elif selected_agenda_item == "Interactive Visualisation":
 
-        # Interactive Scatter Plot
-    st.subheader("Interactive Scatter Plot")
-    fig = px.scatter(data, x="bedrooms", y="price", color="type_of_property", title="Bedrooms vs. Price")
-    st.plotly_chart(fig)
-
-    # Interactive Line Chart
-    st.subheader("Interactive Line Chart")
-    fig = px.line(data, x="bedrooms", y="price", color="type_of_property", title="Price Trends")
-    st.plotly_chart(fig)    
-
-
-    
-    # Interactive 3D Scatter Plot
-    st.subheader("Interactive 3D Scatter Plot")
-    fig = px.scatter_3d(data, x="bedrooms", y="price", z="bathrooms", color="type_of_property", title="3D Plot")
-    st.plotly_chart(fig)
-
     # Interactive Bar Chart
     st.subheader("Interactive Bar Chart")
     fig = px.bar(data, x="type_of_property", y="price", color="type_of_property", title="Average Price by Property Type")
+    st.plotly_chart(fig)
+
+    # Interactive bar Chart
+    st.subheader("Interactive Bar Chart")
+    fig = px.bar(data, x="type_of_property", y="surface_of_the_plot", color="type_of_property", title="Average Price by Property Type")
+    st.plotly_chart(fig)
+
+    # Interactive Scatter Plot
+    st.subheader("Interactive Scatter Plot")
+    fig = px.scatter(data, x="bedrooms", y="price", color="type_of_property", title="Bedrooms vs. Price")
+    st.plotly_chart(fig) 
+
+    # Interactive 3D Scatter Plot
+    st.subheader("Interactive 3D Scatter Plot")
+    fig = px.scatter_3d(data, x="bedrooms", y="price", z="bathrooms", color="type_of_property", title="3D Plot")
     st.plotly_chart(fig)
 
 elif selected_agenda_item == "Exploring the dataset":
