@@ -1,13 +1,12 @@
-# Data Pipeline in Airflow 
+# ETL Pipeline (Docker - Airflow - Streamlit)
 
-![airflow](./assets/pic.png)
+![airflow](./assets/docker-airflow.png)
 
 ## 📖 Table of Contents
 1. [Introduction](#introduction) 📌 
 2. [Description](#description) 📜 
-3. [Airflow Dags](#airflow_dags) 🚀 
-4. [Installation](#installation) 🔧 
-5. [Pipeline](#pipeline) 📊 
+3. [ETL Pipeline](#pipeline) 📊
+5. [Usage](#usage) 🎮 
 6. [Completion](#completion) 🏁 
 
 <a name="introduction"></a>
@@ -16,32 +15,16 @@ This project, part of the AI Bootcamp in Gent at BeCode.org, aims to create a pi
 
 <a name="description"></a>
 ## 📜 Description
-This Airflow pipeline will   
-* Scrape data from houses and appartments on sale
-* Clean the data with pandas
-* Train model
-* Predict the price for given details
-* Data Visualisation
+This project contains series of ETL (Extract, Transform, Load) processes runs within a Docker Compose environment.The workflow is divided into two main steps: Airflow and Streamlit.  
 
-<a name="airflow_dags"></a>
-## 🚀 Airflow Dags
-### cleaning_and_training_model (dag)
-
-This dag contains 4 parts which happens everynight:
-* collects url of houses and appartment on sale.
-* collects data of houses and appartments from url list.
-* cleans collected data
-* train regression model ( for this project Random Forest Regression is being used)
-
-### prediction (dag)
-
-This dag doesnot run everynight. once triggered dialoug box will be displayed, after filling details of a house predicted price (based on trained model) will be displayed. 
-note :trigger prediction dag after cleaning_and_training_model dag to get updated prediction.
-
-### streamlit (dag)
-
-This dag doesnot run overnight. once triggered and starts running open `http://localhost:8501/` to visit streamlit page.
-Page contains data explorations , visualisations and some interactive visualisation.
+- **Airflow**    
+      - Scrape data from houses and appartments on sale  
+      - Clean the data with pandas  
+      - Train the Machine Learning model  
+      - Transfer the data to AWS S3 bucket  
+- **Streamlit**  
+      - Few visualization of data  
+      - Price prediction
 
 <a name="installation"></a>
 ## 🔧 Installation  
@@ -56,23 +39,39 @@ Page contains data explorations , visualisations and some interactive visualisat
 [![uvicorn](https://img.shields.io/badge/uvicorn-0.22.0-yellow)](https://pypi.org/project/uvicorn/)
 [![pickleshare](https://img.shields.io/badge/pickleshare-0.7.5-green)](https://pypi.org/project/pickleshare/)
 [![streamlit](https://img.shields.io/badge/streamlit-1.28.1-yellowgreen)](https://pypi.org/project/streamlit/)
+[![boto3](https://img.shields.io/badge/boto3-1.29.3-yellow)](https://pypi.org/project/boto3/)
 
 - Clone this repository.
-- Install the required modules using `pip install requirements.txt`.
+- Install the required modules using `pip install requirements.txt`
 
 <a name="pipeline"></a>
-## 📊 Pipeline
+## 📊 ETL Pipeline  
+![airflow](./assets/airflow_spin.gif) 
+#### Airflow
+1) Airflow contains one DAG which triggers pipeline containes scraping, cleaning and training model from the scraped data
+   <img src="./assets/airflow-pic.PNG" width="800" height="400">
+
+   
+2) Airflow uses AWS S3 bucket to store and retrive data  
+   <img src="./assets/aws_s3.PNG" width="900" height="400">
+
+#### Streamlit
+1) Visual to explore the data  
+   <img src="./assets/explore.PNG" width="900" height="500">
+2) Price prediction  
+   <img src="./assets/prediction.PNG" width="600" height="700">
+
+<a name="usage"></a>
+## 🎮 Usage
 This can be done by
-* Clone the repo.
-* Redirect to airflow.
-* Open the terminal and activate the environment
-* Run `export AIRFLOW_HOME="$(pwd)"` - this will set the current directory as home for airflow
-* Run `pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"` to install airflow in your environment
-* Run `airflow webserver -p 8080`to access the airflow UI.
-* Run `airflow scheduler`to update UI if you make any changes in .py files.
-* Open `http://localhost:8080/home` from your browser to view and access airflow UI and its logs. (you can also view logs in logs file that created in repo ).
+* Clone the repository
+* Open the terminal and redirect to the repository
+* Download and install Docker desktop in your machine
+* Run `docker-compose up -d`to run docker and respective containers
+* Open `http://localhost:8080/` from your browser to view and access airflow UI and its logs. (you can also view logs in logs file that created in repo )
+* Open `http://localhost:8501/`to open streamlit for visualisation and prediction
 
 <a name="completion"></a>
 ## 🏁 Completion 
-Name - Mythili Palanisamy  
+Name - Mythili Palanisamy  [LinkedIN](https://www.linkedin.com/in/mythili-aug/)  
 Team type - solo
