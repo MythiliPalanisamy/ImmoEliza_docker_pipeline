@@ -46,8 +46,8 @@ This project contains series of ETL (Extract, Transform, Load) processes runs wi
 
 <a name="pipeline"></a>
 ## 📊 ETL Pipeline  
-![airflow](./assets/airflow_spin.gif) 
-#### Airflow
+ 
+### Airflow ![airflow](./assets/airflow_spin.gif)  
 1) Airflow contains one DAG which triggers pipeline containes scraping, cleaning and training model from the scraped data
    <img src="./assets/airflow-pic.PNG" width="800" height="400">
 
@@ -55,7 +55,7 @@ This project contains series of ETL (Extract, Transform, Load) processes runs wi
 2) Airflow uses AWS S3 bucket to store and retrive data  
    <img src="./assets/aws_s3.PNG" width="900" height="400">
 
-#### Streamlit
+### Streamlit <img src="./assets/streamlit.jpg" width="200" height="100">  
 1) Visual to explore the data  
    <img src="./assets/explore.PNG" width="900" height="500">
 2) Price prediction  
