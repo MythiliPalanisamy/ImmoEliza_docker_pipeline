@@ -60,7 +60,7 @@ def scraping_url():
             apartment_house_list = houses_and_apartments(properties_per_page)
 
     return apartment_house_list
-
+ 
 def scraping_url_run():
     logging.info('start scrape url')
     start = time.time()
@@ -70,5 +70,6 @@ def scraping_url_run():
     logging.info("Time Taken: {:.6f}s".format(end-start))
     logging.info('end scrape url')
     
+# scraping_url_run()
 
 

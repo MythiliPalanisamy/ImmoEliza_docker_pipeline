@@ -3,6 +3,7 @@ import aws_s3 as s3
 import logging
 
 def clean():
+
     logging.info('starting cleaning')
 
     df = s3.read_data_from_csv("scraped_data.csv")
@@ -16,8 +17,8 @@ def clean():
     df['Terrace']=df['Terrace'].replace('Yes',int(1))
     df['Terrace']=pd.to_numeric(df['Terrace'], errors='coerce')
 
-    df['Furnished']=df['Furnished'].replace('Yes',int(1))
-    df['Furnished']=df['Furnished'].replace('No',int(0))
+    df['Furnished']=df['Furnished'].replace('Yes','1')
+    df['Furnished']=df['Furnished'].replace('No','0')
     df['Furnished']=pd.to_numeric(df['Furnished'], errors='coerce')
 
     df['Office']=df['Office'].replace('Yes',int(1))

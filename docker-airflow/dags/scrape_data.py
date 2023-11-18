@@ -6,7 +6,6 @@ from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 import aws_s3 as s3
 import logging
-from scrape_url import scraping_url_run
 
 logging.basicConfig(level=logging.INFO)
 skipped_urls = []
@@ -75,9 +74,8 @@ def scrape():
 
     logging.info('start scrape data')
 
-    final_list = s3.read_data_from_text('scraped_url.txt')
+    l = s3.read_data_from_text('scraped_url.txt')
 
-    l = final_list
     House_details = []
 
     with ThreadPoolExecutor(max_workers=10) as executor:
