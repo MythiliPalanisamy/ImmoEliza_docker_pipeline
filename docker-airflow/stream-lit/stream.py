@@ -24,8 +24,9 @@ selected_agenda_item = st.sidebar.radio("Select one to view", ["Introduction", "
 if selected_agenda_item == "Introduction":
     st.write("Welcome to exploring list of houses and apartments with scraped data. ")
     st.write("In this page you can see some visualisation and entire dataset which you can filter to see the availability of desired house or apartment. ")
-elif selected_agenda_item == "Visualisation":
 
+elif selected_agenda_item == "Visualisation":
+    plt.use('Agg')
     # Create a countplot
     countplot_fig, countplot_ax = plt.subplots(figsize=(8, 6))
     sns.countplot(data=data, x="type_of_property", ax=countplot_ax)
@@ -41,7 +42,7 @@ elif selected_agenda_item == "Visualisation":
     boxplot_ax.set_ylabel("Price")
     boxplot_ax.set_title("Price Distribution for Houses and Apartments")
     st.pyplot(boxplot_fig)
-    """
+    
     # Visualization 1: Histogram of Prices
     st.subheader("Price Distribution")
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -56,27 +57,31 @@ elif selected_agenda_item == "Visualisation":
     sns.scatterplot(data=data, x='bedrooms', y='price', ax=ax)
     plt.xlabel("Number of Bedrooms")
     plt.ylabel("Price")
-    st.pyplot(fig)"""
+    st.pyplot(fig)
 
 elif selected_agenda_item == "Interactive Visualisation":
-    # interactive line chart using Plotly to visualize trends over time, such as price changes.
+
+        # Interactive Scatter Plot
+    st.subheader("Interactive Scatter Plot")
+    fig = px.scatter(data, x="bedrooms", y="price", color="type_of_property", title="Bedrooms vs. Price")
+    st.plotly_chart(fig)
+
+    # Interactive Line Chart
     st.subheader("Interactive Line Chart")
     fig = px.line(data, x="bedrooms", y="price", color="type_of_property", title="Price Trends")
     st.plotly_chart(fig)    
 
-    """  # interactive scatter plots, which can be useful for exploring relationships between variables.
-    st.subheader("Interactive Scatter Plot")
-    fig = px.scatter(data, x="bedrooms", y="price", color="type_of_property", title="Bedrooms vs. Price")
-    st.plotly_chart(fig)
-    # Interactive 3D scatter plot
+
+    
+    # Interactive 3D Scatter Plot
     st.subheader("Interactive 3D Scatter Plot")
     fig = px.scatter_3d(data, x="bedrooms", y="price", z="bathrooms", color="type_of_property", title="3D Plot")
     st.plotly_chart(fig)
 
-    # Interactive bar chart
+    # Interactive Bar Chart
     st.subheader("Interactive Bar Chart")
     fig = px.bar(data, x="type_of_property", y="price", color="type_of_property", title="Average Price by Property Type")
-    st.plotly_chart(fig)"""
+    st.plotly_chart(fig)
 
 elif selected_agenda_item == "Exploring the dataset":
     # Filtering options
@@ -189,7 +194,7 @@ elif selected_agenda_item == "Price Prediction":
             predicted_price = predict_forest_price(processed)
             st.success(f'Predicted Price: {predicted_price}')
             return predicted_price
-        predict_house_or_apartment()
+    predict_house_or_apartment()
 
 
 elif selected_agenda_item == "Final notes":

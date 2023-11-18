@@ -89,10 +89,22 @@ def scrape():
             print("skipped urls: ", skipped_urls)
 
     df = pd.DataFrame(House_details)
+    """logging.info('df')
+    print(df)
+    logging.info('house details')
+    print(House_details)
+    print('columns')
+    print(df.columns)
+    print(df['Furnished'])"""
 
-    s3.upload_csv_to_s3('scraped_data.csv', df.columns, House_details)
-    s3.upload_text_to_s3('skipped_url.txt', skipped_urls)
-    logging.info('end scrape data')
+    try:
+        logging.info('Before S3 upload')
+        s3.upload_csv_to_s3('data_scraped.csv', df.columns, House_details)
+        logging.info('After S3 upload')
+
+    except Exception as e:
+        print(f"Error uploading to S3: {e}")
    
     return df
+scrape()
 

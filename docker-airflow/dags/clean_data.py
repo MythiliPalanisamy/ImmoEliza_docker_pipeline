@@ -6,7 +6,7 @@ def clean():
 
     logging.info('starting cleaning')
 
-    df = s3.read_data_from_csv("scraped_data.csv")
+    df = s3.read_data_from_csv("data_scraped.csv")
 
     df = df.drop_duplicates()
     df['Energy class']=df['Energy class'].replace('Not specified', 'NS')

@@ -40,12 +40,12 @@ def upload_csv_to_s3(file_name, column_names, data_to_upload):
     return
 
 def upload_text_to_s3(file_name, data_to_upload):
-    # Create a text string from the data 
-    text_data = '\n'.join(data_to_upload)
-
-    # Upload the text data to S3
-    s3.put_object(Bucket="immoeliza", Key=file_name, Body=text_data)
-    return
+    try:
+        text_data = '\n'.join(data_to_upload)
+        s3.put_object(Bucket="immoeliza", Key=file_name, Body=text_data)
+        print(f"Successfully uploaded {file_name} to S3.")
+    except Exception as e:
+        print(f"Error uploading {file_name} to S3: {str(e)}")
 
 def read_data_from_csv(csv_file_name):
     # Read CSV data from S3 directly into a Pandas DataFrame

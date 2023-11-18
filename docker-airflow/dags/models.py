@@ -17,7 +17,7 @@ def preprocess():
     # using onehot encoder
     ohe = OneHotEncoder(handle_unknown='ignore', sparse_output=True)
     one_hot_encoded_array = ohe.fit_transform(df[column]).toarray()
-    ohe_pickle = pickle.dump(ohe)
+    ohe_pickle = pickle.dumps(ohe)
     s3.pickling(ohe_pickle,'ohe_pickle.pkl')
 
     categories = np.concatenate(ohe.categories_)
@@ -33,7 +33,7 @@ def preprocess():
     # normalisation or scaling - train and test
     minmax_scaler = MinMaxScaler()
     x_train[['surface_of_the_plot', 'living_room_surface']] = minmax_scaler.fit_transform(x_train[[ 'surface_of_the_plot', 'living_room_surface']])
-    minmax_pickle = pickle.dump(minmax_scaler)
+    minmax_pickle = pickle.dumps(minmax_scaler)
     s3.pickling(minmax_pickle, 'minmax_pickle.pkl')
 
     x_test[[ 'surface_of_the_plot', 'living_room_surface']]= minmax_scaler.transform(x_test[[ 'surface_of_the_plot', 'living_room_surface']])
@@ -55,7 +55,7 @@ def RandomForestReg(train_x,train_y, test_x,test_y):
     print("Test Score:", test_score)
 
     # saving the model
-    forest_pickle = pickle.dump(forest)
+    forest_pickle = pickle.dumps(forest)
     s3.pickling(forest_pickle, 'forest_pickle.pkl')
     return test_score
 

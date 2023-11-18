@@ -12,7 +12,7 @@ default_args = {
     'retry_delay': timedelta(minutes=2)
 }
 
-with DAG('cleaning_and_training_model7', 
+with DAG('Cleaning_and_Model_Training', 
             default_args=default_args,
             description='Pipeline', 
             start_date=datetime(2023, 11, 15, 1), # Year, Month, Day, Hour,
