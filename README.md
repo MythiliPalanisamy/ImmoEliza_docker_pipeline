@@ -6,6 +6,7 @@
 1. [Introduction](#introduction) 📌 
 2. [Description](#description) 📜 
 3. [ETL Pipeline](#pipeline) 📊
+4. [Installation](#installation)🔧
 5. [Usage](#usage) 🎮 
 6. [Completion](#completion) 🏁 
 
